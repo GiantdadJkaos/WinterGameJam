@@ -1,0 +1,168 @@
+[gd_scene load_steps=21 format=3 uid="uid://vm428di1jeys"]
+
+[ext_resource type="Script" uid="uid://bextp3hyps2uo" path="res://Monster/ShieldEnemy.gd" id="1_h8yt5"]
+[ext_resource type="PackedScene" uid="uid://dkh3g5sc7dqjq" path="res://Monster/projectiles.tscn" id="2_hy5tp"]
+[ext_resource type="Texture2D" uid="uid://bc7femf60rv72" path="res://Monster/Sprites/mon004_1.png" id="2_wqopw"]
+[ext_resource type="PackedScene" uid="uid://c5jxwgi33ejgv" path="res://Monster/HitDetection.tscn" id="3_q1xyr"]
+[ext_resource type="Texture2D" uid="uid://bj8mx208g4c0x" path="res://Monster/Sprites/shieldEnemy.png" id="4_1mkua"]
+[ext_resource type="PackedScene" uid="uid://f5vf2voeomvh" path="res://Monster/HitDetectionNoDamage.tscn" id="4_iyk81"]
+[ext_resource type="AudioStream" uid="uid://i6qabg5yki7m" path="res://soundFX/09_Impact_01.wav" id="5_du21a"]
+[ext_resource type="Texture2D" uid="uid://dm4ca2br0xtc6" path="res://Monster/Sprites/shieldEnemyFlying-Sheet.png" id="5_gef4i"]
+[ext_resource type="AudioStream" uid="uid://d3pgqq2vwexw8" path="res://soundFX/63_Get_hit_02.wav" id="6_uyuvy"]
+[ext_resource type="AudioStream" uid="uid://xbu7olgjepl0" path="res://soundFX/69_Enemy_death_01.wav" id="7_5bkbx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aj4dc"]
+atlas = ExtResource("5_gef4i")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s5wii"]
+atlas = ExtResource("5_gef4i")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vbp7c"]
+atlas = ExtResource("5_gef4i")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2318q"]
+atlas = ExtResource("5_gef4i")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b73h6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_1mkua")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aj4dc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s5wii")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vbp7c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2318q")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0wjv0"]
+radius = 53.0
+height = 176.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l3e3n"]
+radius = 30.0
+height = 168.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nmgqn"]
+radius = 26.0
+height = 92.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vatjl"]
+radius = 672.048
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_me87s"]
+size = Vector2(1376, 96)
+
+[node name="ShieldEnemy" type="CharacterBody2D"]
+scale = Vector2(0.5, 0.5)
+collision_layer = 4
+script = ExtResource("1_h8yt5")
+BulletScene = ExtResource("2_hy5tp")
+FireDelay = 0.5
+FireWait = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_wqopw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-0.999999, 0.764001)
+scale = Vector2(5.125, 6.0955)
+sprite_frames = SubResource("SpriteFrames_b73h6")
+animation = &"idle"
+
+[node name="CollissionBox" type="CollisionShape2D" parent="."]
+position = Vector2(5, 5)
+scale = Vector2(0.5, 0.5)
+shape = SubResource("CapsuleShape2D_0wjv0")
+
+[node name="Health" parent="." instance=ExtResource("3_q1xyr")]
+collision_layer = 5
+collision_mask = 8
+
+[node name="DamageBox" type="CollisionShape2D" parent="Health"]
+position = Vector2(16, 5)
+scale = Vector2(0.5, 0.5)
+shape = SubResource("CapsuleShape2D_l3e3n")
+
+[node name="Body" parent="." instance=ExtResource("4_iyk81")]
+collision_mask = 8
+
+[node name="InvincibleBox" type="CollisionShape2D" parent="Body"]
+position = Vector2(-6, 6)
+shape = SubResource("CapsuleShape2D_nmgqn")
+
+[node name="NoDamage" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_du21a")
+volume_db = 2.0
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_uyuvy")
+volume_db = 2.0
+
+[node name="Dead" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_5bkbx")
+volume_db = 2.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-0.999998, 0.5)
+scale = Vector2(4.1, 4.85)
+
+[node name="CharacterDetection" type="Area2D" parent="."]
+scale = Vector2(0.25, 0.25)
+collision_layer = 0
+collision_mask = 2
+
+[node name="Detector" type="CollisionShape2D" parent="CharacterDetection"]
+position = Vector2(8, 16)
+shape = SubResource("CircleShape2D_vatjl")
+
+[node name="CharacterDetection2" type="Area2D" parent="."]
+scale = Vector2(0.25, 0.25)
+collision_layer = 0
+collision_mask = 2
+
+[node name="Detector" type="CollisionShape2D" parent="CharacterDetection2"]
+position = Vector2(-520, 8)
+shape = SubResource("RectangleShape2D_me87s")
+
+[node name="FireDelay" type="Timer" parent="."]
+one_shot = true
+
+[node name="FireWait" type="Timer" parent="."]
+one_shot = true
+
+[node name="JumpDelay" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="dead" from="Health" to="." method="_on_health_dead"]
+[connection signal="hit" from="Health" to="." method="_on_health_hit"]
+[connection signal="hitNoDamage" from="Body" to="." method="_on_body_hit_no_damage"]
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="area_entered" from="CharacterDetection" to="." method="_on_character_detection_area_entered"]
+[connection signal="area_exited" from="CharacterDetection" to="." method="_on_character_detection_area_exited"]
+[connection signal="area_entered" from="CharacterDetection2" to="." method="_on_character_detection_2_area_entered"]
+[connection signal="area_exited" from="CharacterDetection2" to="." method="_on_character_detection_2_area_exited"]

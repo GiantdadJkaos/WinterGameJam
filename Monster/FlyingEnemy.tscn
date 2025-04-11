@@ -1,0 +1,87 @@
+[gd_scene load_steps=10 format=3 uid="uid://08c0jra7cbkr"]
+
+[ext_resource type="Script" uid="uid://di5rnkmi0htmb" path="res://Monster/Jumper.gd" id="1_f3y7s"]
+[ext_resource type="Texture2D" uid="uid://cjux2j1op47q2" path="res://Monster/Sprites/drone.png" id="2_cby3r"]
+[ext_resource type="AudioStream" uid="uid://d3pgqq2vwexw8" path="res://soundFX/63_Get_hit_02.wav" id="3_snboy"]
+[ext_resource type="AudioStream" uid="uid://xbu7olgjepl0" path="res://soundFX/69_Enemy_death_01.wav" id="4_ao7u7"]
+[ext_resource type="PackedScene" uid="uid://c5jxwgi33ejgv" path="res://Monster/HitDetection.tscn" id="5_c2my2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_81348"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_cby3r")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lp5bv"]
+size = Vector2(96, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h03oy"]
+size = Vector2(96, 28)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aub3f"]
+radius = 616.013
+
+[node name="Flyer" type="Area2D"]
+script = ExtResource("1_f3y7s")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(1.4375, 1.3125)
+sprite_frames = SubResource("SpriteFrames_81348")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+scale = Vector2(0.25, 0.25)
+shape = SubResource("RectangleShape2D_lp5bv")
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2(0.25, 0.25)
+stream = ExtResource("3_snboy")
+volume_db = 2.0
+
+[node name="Dead" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2(0.25, 0.25)
+stream = ExtResource("4_ao7u7")
+volume_db = 2.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(8.34465e-07, 0.5)
+scale = Vector2(1.2, 0.35)
+
+[node name="HitDetection" parent="." instance=ExtResource("5_c2my2")]
+scale = Vector2(0.25, 0.25)
+collision_layer = 5
+collision_mask = 8
+health = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetection"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_h03oy")
+
+[node name="CharacterDetection" type="Area2D" parent="."]
+scale = Vector2(0.25, 0.25)
+collision_layer = 0
+collision_mask = 2
+
+[node name="Detector" type="CollisionShape2D" parent="CharacterDetection"]
+position = Vector2(8, 16)
+shape = SubResource("CircleShape2D_aub3f")
+
+[node name="MoveAmmount" type="Timer" parent="."]
+one_shot = true
+
+[node name="WaitAmmount" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="dead" from="HitDetection" to="." method="_on_hit_detection_dead"]
+[connection signal="hit" from="HitDetection" to="." method="_on_hit_detection_hit"]
+[connection signal="area_entered" from="CharacterDetection" to="." method="_on_character_detection_area_entered"]
+[connection signal="area_exited" from="CharacterDetection" to="." method="_on_character_detection_area_exited"]
+[connection signal="timeout" from="MoveAmmount" to="." method="_on_move_ammount_timeout"]
+[connection signal="timeout" from="WaitAmmount" to="." method="_on_wait_ammount_timeout"]

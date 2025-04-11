@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5jxwgi33ejgv"]
+
+[ext_resource type="Script" uid="uid://bm4rv3o2f1uvh" path="res://Monster/Health.gd" id="1_vxkcc"]
+
+[node name="HitDetection" type="Area2D"]
+script = ExtResource("1_vxkcc")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

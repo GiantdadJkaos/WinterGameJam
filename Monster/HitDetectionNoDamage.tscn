@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://f5vf2voeomvh"]
+
+[ext_resource type="Script" uid="uid://bvlehem85jc3h" path="res://Monster/HitDetectionNoDamage.gd" id="1_l1cfj"]
+
+[node name="Body" type="Area2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_l1cfj")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

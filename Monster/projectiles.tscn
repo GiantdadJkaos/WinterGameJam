@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkh3g5sc7dqjq"]
+
+[ext_resource type="Script" uid="uid://dcy58ibnwuuwu" path="res://Monster/projectiles.gd" id="1_k6xyh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8vhut"]
+
+[node name="Projectiles" type="Area2D"]
+scale = Vector2(0.5, 0.5)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_k6xyh")
+
+[node name="ProjectileHitBox" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_8vhut")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0.717647, 0.223529, 0.14902, 1)
+polygon = PackedVector2Array(0, -10, 10, 0, 0, 10, -10, 0)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

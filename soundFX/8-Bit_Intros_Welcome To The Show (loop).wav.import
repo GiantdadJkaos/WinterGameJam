@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cfrvx5371ej7g"
+path="res://.godot/imported/8-Bit_Intros_Welcome To The Show (loop).wav-4f2f2f97c7c9a5bce03126928ce59ab3.sample"
+
+[deps]
+
+source_file="res://soundFX/8-Bit_Intros_Welcome To The Show (loop).wav"
+dest_files=["res://.godot/imported/8-Bit_Intros_Welcome To The Show (loop).wav-4f2f2f97c7c9a5bce03126928ce59ab3.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

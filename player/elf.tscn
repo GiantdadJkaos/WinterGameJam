@@ -1,0 +1,157 @@
+[gd_scene load_steps=18 format=3 uid="uid://csks3qtpyelkk"]
+
+[ext_resource type="Script" uid="uid://baasrar8fbnrf" path="res://player/elf.gd" id="1_a3vos"]
+[ext_resource type="PackedScene" uid="uid://c8euojq3cw0og" path="res://player/Present.tscn" id="2_r1s78"]
+[ext_resource type="Texture2D" uid="uid://cphu6mh2t72ca" path="res://player/sprites/elfJumpFall-Sheet.png" id="3_u557t"]
+[ext_resource type="Texture2D" uid="uid://cc4t4ktpw82mc" path="res://player/sprites/elfIdle-Sheet.png" id="4_aeruo"]
+[ext_resource type="Texture2D" uid="uid://cqwvyogg58ett" path="res://player/sprites/elfWalk-Sheet.png" id="5_c8c7y"]
+[ext_resource type="AudioStream" uid="uid://cg0vbwbgueoi4" path="res://soundFX/32_Jump_05.wav" id="14_6kcxs"]
+[ext_resource type="AudioStream" uid="uid://dlsghrb1hpm42" path="res://soundFX/64_Get_hit_03.wav" id="15_wlwnt"]
+[ext_resource type="AudioStream" uid="uid://k3lsjp6kxbmo" path="res://soundFX/64_Special_move_06.wav" id="16_iwfsq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_im8b2"]
+atlas = ExtResource("3_u557t")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8cny7"]
+atlas = ExtResource("3_u557t")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jgrks"]
+atlas = ExtResource("4_aeruo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2s8v4"]
+atlas = ExtResource("4_aeruo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cbh43"]
+atlas = ExtResource("3_u557t")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_go228"]
+atlas = ExtResource("5_c8c7y")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_th0im"]
+atlas = ExtResource("5_c8c7y")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hgu35"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_im8b2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8cny7")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jgrks")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2s8v4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cbh43")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_go228")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_th0im")
+}],
+"loop": true,
+"name": &"run",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c63j3"]
+radius = 6.0
+height = 14.0
+
+[node name="elf" type="CharacterBody2D"]
+scale = Vector2(2, 2)
+collision_layer = 2
+script = ExtResource("1_a3vos")
+Present_scene = ExtResource("2_r1s78")
+hitDuration = 0.4
+InvincibilityDuration = 5.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_hgu35")
+animation = &"run"
+frame_progress = 0.995615
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("CapsuleShape2D_c63j3")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(0, -10.625)
+zoom = Vector2(3, 3)
+limit_left = -250
+limit_top = -120
+limit_bottom = 200
+position_smoothing_speed = 0.1
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.15
+drag_top_margin = 0.9
+drag_right_margin = 0.15
+drag_bottom_margin = 0.1
+
+[node name="FireDelay" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="HitBox" type="Area2D" parent="."]
+position = Vector2(0, -2)
+collision_layer = 2
+collision_mask = 20
+
+[node name="HitBoxCollision" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_c63j3")
+
+[node name="HitDelay" type="Timer" parent="."]
+one_shot = true
+
+[node name="Invinicibility" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="RespawnDelay" type="Timer" parent="."]
+one_shot = true
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("14_6kcxs")
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_wlwnt")
+
+[node name="GameOver" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_wlwnt")
+
+[node name="Fall" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_iwfsq")
+
+[connection signal="area_entered" from="HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="timeout" from="RespawnDelay" to="." method="_on_respawn_delay_timeout"]
+[connection signal="finished" from="GameOver" to="." method="_on_game_over_finished"]

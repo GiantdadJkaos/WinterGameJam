@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2n6gb6fmarhs"]
+
+[ext_resource type="Script" uid="uid://bflm7drnb0ym3" path="res://main.gd" id="1_cpf5c"]
+[ext_resource type="Texture2D" uid="uid://c30o50034k8p6" path="res://SpriteSheet/background.png" id="1_twke2"]
+[ext_resource type="AudioStream" uid="uid://cfrvx5371ej7g" path="res://soundFX/8-Bit_Intros_Welcome To The Show (loop).wav" id="3_8nigl"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_cpf5c")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+texture_filter = 1
+scale = Vector2(5, 5)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2(125, 64)
+texture = ExtResource("1_twke2")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 453.0
+offset_top = 222.0
+offset_right = 705.0
+offset_bottom = 374.0
+theme_override_font_sizes/font_size = 40
+text = "START"
+
+[node name="quit" type="Button" parent="."]
+offset_left = 453.0
+offset_top = 431.0
+offset_right = 705.0
+offset_bottom = 583.0
+theme_override_font_sizes/font_size = 40
+text = "QUIT"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(584, 296)
+stream = ExtResource("3_8nigl")
+volume_db = -10.0
+autoplay = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = -15.0
+offset_top = 100.0
+offset_right = 1154.0
+offset_bottom = 196.0
+theme_override_colors/font_color = Color(0.666667, 0, 0, 1)
+theme_override_font_sizes/font_size = 70
+text = "Save Santa!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="quit" to="." method="_on_quit_pressed"]
